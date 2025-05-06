@@ -10,12 +10,16 @@ COPY MANIFEST.MF .
 # Embed the Main-Class entry so 'java -jar' works
 RUN jar ufm EaglerXServer.jar MANIFEST.MF
 
-# Copy and make our startup script executable
+# Copy the startup script
 COPY main.sh .
-RUN chmod +x main.sh
 
-# Expose the default Minecraft port internally (Railway will map 443→$PORT)
+# Ensure Unix line endings and make it executable
+RUN apt-get update && apt-get install -y dos2unix \
+    && dos2unix main.sh \
+    && chmod +x main.sh
+
+# Internal Minecraft port; Railway maps external 443→$PORT
 EXPOSE 25565
 
-# Use ENTRYPOINT so Railway knows this is the process to keep alive
+# Run the startup script
 ENTRYPOINT ["bash", "main.sh"]
