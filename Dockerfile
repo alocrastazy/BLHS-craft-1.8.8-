@@ -1,6 +1,15 @@
-FROM eclipse-temurin:8-jre
+FROM eclipse-temurin:8-jdk
 WORKDIR /app
-COPY . .
+
+# Copy the server JAR & manifest
+COPY EaglercraftXServer.jar .
+COPY MANIFEST.MF .
+
+# Update the JAR in-place so it has the Main-Class
+RUN jar ufm EaglercraftXServer.jar MANIFEST.MF
+
+# Copy your start script
+COPY main.sh .
 RUN chmod +x main.sh
-EXPOSE 25565
+
 CMD ["bash", "main.sh"]
