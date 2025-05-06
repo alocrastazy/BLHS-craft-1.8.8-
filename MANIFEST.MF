@@ -1,0 +1,1 @@
+Main-Class: net.lax1dude.eaglercraft.sp.IntegratedServer
